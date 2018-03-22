@@ -5,9 +5,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
+import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.refactoringminer.api.GitHistoryRefactoringMiner;
 import org.refactoringminer.api.GitService;
 import org.refactoringminer.api.Refactoring;
@@ -17,6 +23,8 @@ import org.refactoringminer.util.GitServiceImpl;
 
 public class RefactoringMiner {
 
+	static SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+	
 	public static void main(String[] args) throws Exception {
 		if (args.length < 1) {
 			throw argumentException();
@@ -61,6 +69,7 @@ public class RefactoringMiner {
 
 			GitHistoryRefactoringMiner detector = new GitHistoryRefactoringMinerImpl();
 			detector.detectAll(repo, branch, new RefactoringHandler() {
+				/*
 				@Override
 				public void handle(String commitId, List<Refactoring> refactorings) {
 					if (refactorings.isEmpty()) {
@@ -72,8 +81,23 @@ public class RefactoringMiner {
 							saveToFile(filePath, getResultRefactoringDescription(commitId, ref));
 						}
 					}
-				}
+				}*/
 
+				@Override
+				public void handle(RevCommit commitData, List<Refactoring> refactorings) {
+
+					if (refactorings.isEmpty()) {
+						System.out.println("No refactorings found in commit " + commitData.getId());
+					} else {
+						System.out.println(refactorings.size() + " refactorings found in commit " + commitData.getId());
+
+						for (Refactoring ref : refactorings) {
+							saveToFile(filePath, getResultRefactoringDescription(commitData, ref));
+						}
+					}
+					
+				}
+				
 				@Override
 				public void onFinish(int refactoringsCount, int commitsCount, int errorCommitsCount) {
 					System.out.println("Finish mining, result is saved to file: " + filePath);
@@ -246,8 +270,25 @@ public class RefactoringMiner {
 		builder.append(ref);
 		return builder.toString();
 	}
+	
+	private static String getResultRefactoringDescription(RevCommit currentCommit, Refactoring ref) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(currentCommit.getId());
+		builder.append(";");
+		builder.append(ref.getName());
+		builder.append(";");
+		builder.append(ref);
+		builder.append(";");
+		PersonIdent authorIdent = currentCommit.getAuthorIdent();
+		builder.append(authorIdent.getName()).append(";");
+		Date commitDate = authorIdent.getWhen();
+		builder.append(format.format(commitDate));
+		
+		return builder.toString();
+	}
 
 	private static void saveToFile(String fileName, String content) {
+		System.out.println(content);
 		Path path = Paths.get(fileName);
 		byte[] contentBytes = (content + System.lineSeparator()).getBytes();
 		try {
