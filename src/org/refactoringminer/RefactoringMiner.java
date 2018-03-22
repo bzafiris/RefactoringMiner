@@ -24,6 +24,7 @@ import org.refactoringminer.util.GitServiceImpl;
 public class RefactoringMiner {
 
 	static SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+	static boolean filterTests = true;
 	
 	public static void main(String[] args) throws Exception {
 		if (args.length < 1) {
@@ -272,6 +273,11 @@ public class RefactoringMiner {
 	}
 	
 	private static String getResultRefactoringDescription(RevCommit currentCommit, Refactoring ref) {
+		
+		if (filterTests && isTestCodeRefactoring(ref)) {
+			return null;
+		}
+		
 		StringBuilder builder = new StringBuilder();
 		builder.append(currentCommit.getId());
 		builder.append(";");
@@ -287,7 +293,18 @@ public class RefactoringMiner {
 		return builder.toString();
 	}
 
+	private static boolean isTestCodeRefactoring(Refactoring ref) {
+		String refDescription = ref.toString();
+		if (refDescription.endsWith("Test") || refDescription.endsWith("Tests")) {
+			return true;
+		}
+		return false;
+	}
+	
 	private static void saveToFile(String fileName, String content) {
+		if (content == null) {
+			return;
+		}
 		System.out.println(content);
 		Path path = Paths.get(fileName);
 		byte[] contentBytes = (content + System.lineSeparator()).getBytes();
