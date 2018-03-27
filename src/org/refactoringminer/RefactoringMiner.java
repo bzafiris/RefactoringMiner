@@ -137,6 +137,7 @@ public class RefactoringMiner {
 
 			GitHistoryRefactoringMiner detector = new GitHistoryRefactoringMinerImpl();
 			detector.detectBetweenCommits(repo, startCommit, endCommit, new RefactoringHandler() {
+				/*
 				@Override
 				public void handle(String commitId, List<Refactoring> refactorings) {
 					if (refactorings.isEmpty()) {
@@ -147,8 +148,23 @@ public class RefactoringMiner {
 							saveToFile(filePath, getResultRefactoringDescription(commitId, ref));
 						}
 					}
-				}
+				}*/
 
+				@Override
+				public void handle(RevCommit commitData, List<Refactoring> refactorings) {
+
+					if (refactorings.isEmpty()) {
+						System.out.println("No refactorings found in commit " + commitData.getId());
+					} else {
+						System.out.println(refactorings.size() + " refactorings found in commit " + commitData.getId());
+
+						for (Refactoring ref : refactorings) {
+							saveToFile(filePath, getResultRefactoringDescription(commitData, ref));
+						}
+					}
+					
+				}
+				
 				@Override
 				public void onFinish(int refactoringsCount, int commitsCount, int errorCommitsCount) {
 					System.out.println("Finish mining, result is saved to file: " + filePath);

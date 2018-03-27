@@ -12,4 +12,8 @@ cp build/distributions/RefactoringMiner.zip  /media/ramdisk
 unzip /media/ramdisk/RefactoringMiner.zip -d /media/ramdisk
 
 cp run.sh /media/ramdisk
+cp run-bc.sh /media/ramdisk
+
+chmod +x /media/ramdisk/run.sh
+chmod +x /media/ramdisk/run-bc.sh
 
