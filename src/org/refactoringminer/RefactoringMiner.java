@@ -18,7 +18,7 @@ import org.refactoringminer.api.GitHistoryRefactoringMiner;
 import org.refactoringminer.api.GitService;
 import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringHandler;
-import org.refactoringminer.rm1.GitHistoryRefactoringMinerImpl;
+import org.refactoringminer.rm1.RefactoringMinerFactory;
 import org.refactoringminer.util.GitServiceImpl;
 
 public class RefactoringMiner {
@@ -68,7 +68,7 @@ public class RefactoringMiner {
 			Files.deleteIfExists(Paths.get(filePath));
 			saveToFile(filePath, getResultHeader());
 
-			GitHistoryRefactoringMiner detector = new GitHistoryRefactoringMinerImpl();
+			GitHistoryRefactoringMiner detector = RefactoringMinerFactory.createDefaultGitHistoryMiner();
 			detector.detectAll(repo, branch, new RefactoringHandler() {
 				/*
 				@Override
@@ -135,7 +135,7 @@ public class RefactoringMiner {
 			Files.deleteIfExists(Paths.get(filePath));
 			saveToFile(filePath, getResultHeader());
 
-			GitHistoryRefactoringMiner detector = new GitHistoryRefactoringMinerImpl();
+			GitHistoryRefactoringMiner detector = RefactoringMinerFactory.createDefaultGitHistoryMiner();
 			detector.detectBetweenCommits(repo, startCommit, endCommit, new RefactoringHandler() {
 				/*
 				@Override
@@ -201,7 +201,7 @@ public class RefactoringMiner {
 			Files.deleteIfExists(Paths.get(filePath));
 			saveToFile(filePath, getResultHeader());
 
-			GitHistoryRefactoringMiner detector = new GitHistoryRefactoringMinerImpl();
+			GitHistoryRefactoringMiner detector = RefactoringMinerFactory.createDefaultGitHistoryMiner();
 			detector.detectBetweenTags(repo, startTag, endTag, new RefactoringHandler() {
 				
 				@Override
@@ -256,7 +256,7 @@ public class RefactoringMiner {
 		String commitId = args[2];
 		GitService gitService = new GitServiceImpl();
 		try (Repository repo = gitService.openRepository(folder)) {
-			GitHistoryRefactoringMiner detector = new GitHistoryRefactoringMinerImpl();
+			GitHistoryRefactoringMiner detector = RefactoringMinerFactory.createDefaultGitHistoryMiner();
 			detector.detectAtCommit(repo, null, commitId, new RefactoringHandler() {
 				@Override
 				public void handle(String commitId, List<Refactoring> refactorings) {

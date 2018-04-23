@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# ./gradlew distZip
 # $1: git repository for analysis
 
 # prepare ramdisk

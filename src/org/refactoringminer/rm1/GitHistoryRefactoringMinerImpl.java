@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.Repository;
@@ -30,6 +31,7 @@ import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringHandler;
 import org.refactoringminer.api.RefactoringType;
 import org.refactoringminer.util.GitServiceImpl;
+import org.refactoringminer.utils.filter.FileNameFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +39,9 @@ public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMine
 
 	Logger logger = LoggerFactory.getLogger(GitHistoryRefactoringMinerImpl.class);
 	private Set<RefactoringType> refactoringTypesToConsider = null;
-	
-	public GitHistoryRefactoringMinerImpl() {
+    private FileNameFilter fileFilter;
+
+    public GitHistoryRefactoringMinerImpl() {
 		this.setRefactoringTypesToConsider(
 			RefactoringType.RENAME_CLASS,
 			RefactoringType.MOVE_CLASS,
@@ -107,9 +110,24 @@ public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMine
 		List<String> filesCurrent = new ArrayList<String>();
 		Map<String, String> renamedFilesHint = new HashMap<String, String>();
 		gitService.fileTreeDiff(repository, currentCommit, filesBefore, filesCurrent, renamedFilesHint, true);
-		// If no java files changed, there is no refactoring. Also, if there are
-		// only ADD's or only REMOVE's there is no refactoring
-		if (!filesBefore.isEmpty() && !filesCurrent.isEmpty() && currentCommit.getParentCount() > 0) {
+
+        if (fileFilter != null) { // filter files, not yet implemented
+            filesBefore = filesBefore.stream().filter(fileName -> fileFilter.accept(fileName)).collect(Collectors.toList());
+            filesCurrent = filesCurrent.stream().filter(fileName -> fileFilter.accept(fileName)).collect(Collectors.toList());
+        }
+
+        // If no java files changed, there is no refactoring. Also, if there are
+        // only ADD's or only REMOVE's there is no refactoring
+        if (!filesBefore.isEmpty() && !filesCurrent.isEmpty() && currentCommit.getParentCount() > 0) {
+
+
+			for(String fileName: filesBefore){
+				System.out.println("-->Before:" + fileName);
+			}
+			for(String fileName: filesCurrent){
+				System.out.println("**>Current:" + fileName);
+			}
+
 			// Checkout and build model for parent commit
 			String parentCommit = currentCommit.getParent(0).getName();
 			gitService.checkout(repository, parentCommit);
@@ -321,4 +339,8 @@ public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMine
 			walk.dispose();
 		}
 	}
+
+    public void setSourceFileFilter(FileNameFilter fileNameFilter) {
+        this.fileFilter = fileNameFilter;
+    }
 }
