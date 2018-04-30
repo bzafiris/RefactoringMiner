@@ -120,14 +120,6 @@ public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMine
         // only ADD's or only REMOVE's there is no refactoring
         if (!filesBefore.isEmpty() && !filesCurrent.isEmpty() && currentCommit.getParentCount() > 0) {
 
-
-			for(String fileName: filesBefore){
-				System.out.println("-->Before:" + fileName);
-			}
-			for(String fileName: filesCurrent){
-				System.out.println("**>Current:" + fileName);
-			}
-
 			// Checkout and build model for parent commit
 			String parentCommit = currentCommit.getParent(0).getName();
 			gitService.checkout(repository, parentCommit);

@@ -6,10 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Repository;
@@ -21,12 +19,17 @@ import org.refactoringminer.api.RefactoringHandler;
 import org.refactoringminer.rm1.RefactoringMinerFactory;
 import org.refactoringminer.util.GitServiceImpl;
 
+import static org.refactoringminer.util.StringUtils.trimWhitespaces;
+
 public class RefactoringMiner {
+
+    public static final String CSV_FIELD_SEPARATOR = "|||";
 
 	static SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
 	static boolean filterTests = true;
-	
-	public static void main(String[] args) throws Exception {
+    private static GitHistoryRefactoringMiner detector;
+
+    public static void main(String[] args) throws Exception {
 		if (args.length < 1) {
 			throw argumentException();
 		}
@@ -49,7 +52,11 @@ public class RefactoringMiner {
 		} else {
 			throw argumentException();
 		}
+
+
 	}
+
+
 
 	private static void detectAll(String[] args) throws Exception {
 		if (args.length > 3) {
@@ -68,7 +75,7 @@ public class RefactoringMiner {
 			Files.deleteIfExists(Paths.get(filePath));
 			saveToFile(filePath, getResultHeader());
 
-			GitHistoryRefactoringMiner detector = RefactoringMinerFactory.createDefaultGitHistoryMiner();
+            detector = RefactoringMinerFactory.createProductionCodeGitHistoryMiner();
 			detector.detectAll(repo, branch, new RefactoringHandler() {
 				/*
 				@Override
@@ -135,7 +142,7 @@ public class RefactoringMiner {
 			Files.deleteIfExists(Paths.get(filePath));
 			saveToFile(filePath, getResultHeader());
 
-			GitHistoryRefactoringMiner detector = RefactoringMinerFactory.createDefaultGitHistoryMiner();
+			detector = RefactoringMinerFactory.createDefaultGitHistoryMiner();
 			detector.detectBetweenCommits(repo, startCommit, endCommit, new RefactoringHandler() {
 				/*
 				@Override
@@ -201,7 +208,7 @@ public class RefactoringMiner {
 			Files.deleteIfExists(Paths.get(filePath));
 			saveToFile(filePath, getResultHeader());
 
-			GitHistoryRefactoringMiner detector = RefactoringMinerFactory.createDefaultGitHistoryMiner();
+			detector = RefactoringMinerFactory.createDefaultGitHistoryMiner();
 			detector.detectBetweenTags(repo, startTag, endTag, new RefactoringHandler() {
 				
 				@Override
@@ -256,7 +263,7 @@ public class RefactoringMiner {
 		String commitId = args[2];
 		GitService gitService = new GitServiceImpl();
 		try (Repository repo = gitService.openRepository(folder)) {
-			GitHistoryRefactoringMiner detector = RefactoringMinerFactory.createDefaultGitHistoryMiner();
+			detector = RefactoringMinerFactory.createDefaultGitHistoryMiner();
 			detector.detectAtCommit(repo, null, commitId, new RefactoringHandler() {
 				@Override
 				public void handle(String commitId, List<Refactoring> refactorings) {
@@ -295,45 +302,25 @@ public class RefactoringMiner {
 		return new IllegalArgumentException("Type `RefactoringMiner -h` to show usage.");
 	}
 
-	private static String getResultRefactoringDescription(String commitId, Refactoring ref) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(commitId);
-		builder.append(";");
-		builder.append(ref.getName());
-		builder.append(";");
-		builder.append(ref);
-		return builder.toString();
-	}
-	
 	private static String getResultRefactoringDescription(RevCommit currentCommit, Refactoring ref) {
-		
-		if (filterTests && isTestCodeRefactoring(ref)) {
-			return null;
-		}
-		
+
 		StringBuilder builder = new StringBuilder();
 		builder.append(currentCommit.getId());
-		builder.append(";");
+		builder.append(CSV_FIELD_SEPARATOR);
 		builder.append(ref.getName());
-		builder.append(";");
+		builder.append(CSV_FIELD_SEPARATOR);
 		builder.append(ref);
-		builder.append(";");
+		builder.append(CSV_FIELD_SEPARATOR);
 		PersonIdent authorIdent = currentCommit.getAuthorIdent();
-		builder.append(authorIdent.getName()).append(";");
+		builder.append(authorIdent.getName()).append(CSV_FIELD_SEPARATOR);
 		Date commitDate = authorIdent.getWhen();
 		builder.append(format.format(commitDate));
+		builder.append(CSV_FIELD_SEPARATOR);
+		builder.append(trimWhitespaces(currentCommit.getFullMessage()));
 		
 		return builder.toString();
 	}
 
-	private static boolean isTestCodeRefactoring(Refactoring ref) {
-		String refDescription = ref.toString();
-		if (refDescription.endsWith("Test") || refDescription.endsWith("Tests")) {
-			return true;
-		}
-		return false;
-	}
-	
 	private static void saveToFile(String fileName, String content) {
 		if (content == null) {
 			return;
@@ -349,7 +336,19 @@ public class RefactoringMiner {
 	}
 
 	private static String getResultHeader() {
-		return "CommitId;RefactoringType;RefactoringDetail;Author;Date";
+		return new StringBuffer()
+                .append("CommitId")
+                .append(CSV_FIELD_SEPARATOR)
+                .append("RefactoringType")
+                .append(CSV_FIELD_SEPARATOR)
+                .append("RefactoringDetail")
+                .append(CSV_FIELD_SEPARATOR)
+                .append("Author")
+                .append(CSV_FIELD_SEPARATOR)
+                .append("Date")
+                .append(CSV_FIELD_SEPARATOR)
+                .append("GitComment")
+                .toString();
 	}
 
 }
