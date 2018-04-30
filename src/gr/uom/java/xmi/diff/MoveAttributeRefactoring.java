@@ -4,6 +4,7 @@ import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringType;
 
 import gr.uom.java.xmi.UMLAttribute;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class MoveAttributeRefactoring implements Refactoring {
 	protected UMLAttribute originalAttribute;
@@ -25,7 +26,12 @@ public class MoveAttributeRefactoring implements Refactoring {
 		return sb.toString();
 	}
 
-	public String getName() {
+    @Override
+    public void accept(RefactoringVisitor visitor) {
+        visitor.visitMoveAttribute(this);
+    }
+
+    public String getName() {
 		return this.getRefactoringType().getDisplayName();
 	}
 

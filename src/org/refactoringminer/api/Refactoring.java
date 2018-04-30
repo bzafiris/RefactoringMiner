@@ -4,10 +4,12 @@ import java.io.Serializable;
 
 public interface Refactoring extends Serializable {
 
-	public RefactoringType getRefactoringType();
+	RefactoringType getRefactoringType();
 	
-	public String getName();
+	String getName();
 
-	public String toString();
-	
+	String toString();
+
+	void accept(RefactoringVisitor visitor);
+
 }

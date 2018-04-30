@@ -2,6 +2,7 @@ package gr.uom.java.xmi.diff;
 
 import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringType;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class MoveClassRefactoring implements Refactoring {
 	private String originalClassName;
@@ -21,7 +22,12 @@ public class MoveClassRefactoring implements Refactoring {
 		return sb.toString();
 	}
 
-	public RenamePattern getRenamePattern() {
+    @Override
+    public void accept(RefactoringVisitor visitor) {
+        visitor.visitMoveClass(this);
+    }
+
+    public RenamePattern getRenamePattern() {
 		int separatorPos = separatorPosOfCommonSuffix('.', originalClassName, movedClassName);
 		if (separatorPos == -1) {
 			return new RenamePattern(originalClassName, movedClassName);

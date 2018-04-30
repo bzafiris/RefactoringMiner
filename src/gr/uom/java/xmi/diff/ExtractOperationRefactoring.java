@@ -9,6 +9,7 @@ import org.refactoringminer.api.RefactoringType;
 import gr.uom.java.xmi.UMLOperation;
 import gr.uom.java.xmi.decomposition.UMLOperationBodyMapper;
 import gr.uom.java.xmi.decomposition.replacement.Replacement;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class ExtractOperationRefactoring implements Refactoring {
 	private UMLOperation extractedOperation;
@@ -41,7 +42,12 @@ public class ExtractOperationRefactoring implements Refactoring {
 		return sb.toString();
 	}
 
-	private String getClassName() {
+    @Override
+    public void accept(RefactoringVisitor visitor) {
+        visitor.visitExtractOperation(this);
+    }
+
+    private String getClassName() {
 		return getSourceOperationBeforeExtraction().getClassName();
 	}
 

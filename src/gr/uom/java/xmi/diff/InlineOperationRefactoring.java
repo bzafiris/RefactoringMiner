@@ -9,6 +9,7 @@ import org.refactoringminer.api.RefactoringType;
 import gr.uom.java.xmi.UMLOperation;
 import gr.uom.java.xmi.decomposition.UMLOperationBodyMapper;
 import gr.uom.java.xmi.decomposition.replacement.Replacement;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class InlineOperationRefactoring implements Refactoring {
 	private UMLOperation inlinedOperation;
@@ -41,7 +42,12 @@ public class InlineOperationRefactoring implements Refactoring {
 		return sb.toString();
 	}
 
-	private String getClassName() {
+    @Override
+    public void accept(RefactoringVisitor visitor) {
+        visitor.visitInlineOperation(this);
+    }
+
+    private String getClassName() {
 		return targetOperationAfterInline.getClassName();
 	}
 

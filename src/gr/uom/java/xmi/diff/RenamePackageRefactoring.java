@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringType;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class RenamePackageRefactoring implements Refactoring {
 
@@ -52,4 +53,9 @@ public class RenamePackageRefactoring implements Refactoring {
 		sb.append(movedPath);
 		return sb.toString();
 	}
+
+    @Override
+    public void accept(RefactoringVisitor visitor) {
+        visitor.visitRenamePackage(this);
+    }
 }

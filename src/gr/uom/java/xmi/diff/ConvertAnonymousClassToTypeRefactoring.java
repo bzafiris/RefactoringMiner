@@ -5,6 +5,7 @@ import org.refactoringminer.api.RefactoringType;
 
 import gr.uom.java.xmi.UMLAnonymousClass;
 import gr.uom.java.xmi.UMLClass;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class ConvertAnonymousClassToTypeRefactoring implements Refactoring {
 	private UMLAnonymousClass anonymousClass;
@@ -24,7 +25,12 @@ public class ConvertAnonymousClassToTypeRefactoring implements Refactoring {
 		return sb.toString();
 	}
 
-	public String getName() {
+    @Override
+    public void accept(RefactoringVisitor visitor) {
+        visitor.visitConvertAnonymousClassToType(this);
+    }
+
+    public String getName() {
 		return this.getRefactoringType().getDisplayName();
 	}
 

@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringType;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class ExtractSuperclassRefactoring implements Refactoring {
 	private UMLClass extractedClass;
@@ -26,7 +27,12 @@ public class ExtractSuperclassRefactoring implements Refactoring {
 		return sb.toString();
 	}
 
-	public String getName() {
+    @Override
+    public void accept(RefactoringVisitor visitor) {
+        visitor.visitExtractSuperclass(this);
+    }
+
+    public String getName() {
 		return this.getRefactoringType().getDisplayName();
 	}
 
