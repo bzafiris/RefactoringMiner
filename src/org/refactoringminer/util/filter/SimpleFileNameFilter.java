@@ -1,4 +1,6 @@
-package org.refactoringminer.utils.filter;
+package org.refactoringminer.util.filter;
+
+import org.refactoringminer.util.filter.FileNameFilter;
 
 import java.util.ArrayList;
 import java.util.List;

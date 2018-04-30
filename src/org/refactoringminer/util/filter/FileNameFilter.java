@@ -1,4 +1,4 @@
-package org.refactoringminer.utils.filter;
+package org.refactoringminer.util.filter;
 
 public interface FileNameFilter {
 

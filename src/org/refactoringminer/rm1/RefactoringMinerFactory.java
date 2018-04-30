@@ -1,9 +1,8 @@
 package org.refactoringminer.rm1;
 
 import org.refactoringminer.api.GitHistoryRefactoringMiner;
-import org.refactoringminer.utils.filter.FileFilterFactory;
-import org.refactoringminer.utils.filter.FileNameFilter;
-import org.refactoringminer.utils.filter.SimpleFileNameFilter;
+import org.refactoringminer.util.filter.FileFilterFactory;
+import org.refactoringminer.util.filter.FileNameFilter;
 
 public class RefactoringMinerFactory {
 

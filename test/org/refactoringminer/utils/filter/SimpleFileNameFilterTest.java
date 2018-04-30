@@ -2,6 +2,7 @@ package org.refactoringminer.utils.filter;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.refactoringminer.util.filter.SimpleFileNameFilter;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;

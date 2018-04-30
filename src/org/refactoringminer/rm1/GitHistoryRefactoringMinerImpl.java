@@ -31,7 +31,7 @@ import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringHandler;
 import org.refactoringminer.api.RefactoringType;
 import org.refactoringminer.util.GitServiceImpl;
-import org.refactoringminer.utils.filter.FileNameFilter;
+import org.refactoringminer.util.filter.FileNameFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
