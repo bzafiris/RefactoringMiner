@@ -75,6 +75,8 @@ public class RefactoringMiner {
 			String filePath = folderPath.toString() + "/" + fileName;
 
 			csvLogger.setCsvFilePath(filePath);
+			csvLogger.setProjectName(folder);
+			csvLogger.setBranch(branch);
 			csvLogger.start();
 
             detector = RefactoringMinerFactory.createProductionCodeGitHistoryMiner();
@@ -129,6 +131,8 @@ public class RefactoringMiner {
 			String filePath = folderPath.toString() + "/" + fileName;
 
 			csvLogger.setCsvFilePath(filePath);
+            csvLogger.setProjectName(folder);
+            csvLogger.setBranch(startCommit + ";" + endCommit);
 			csvLogger.start();
 
 			detector = RefactoringMinerFactory.createDefaultGitHistoryMiner();
@@ -181,6 +185,8 @@ public class RefactoringMiner {
 			String filePath = folderPath.toString() + "/" + fileName;
 
 			csvLogger.setCsvFilePath(filePath);
+            csvLogger.setProjectName(folder);
+            csvLogger.setBranch(startTag + ";" + endTag);
 			csvLogger.start();
 
 			detector = RefactoringMinerFactory.createDefaultGitHistoryMiner();

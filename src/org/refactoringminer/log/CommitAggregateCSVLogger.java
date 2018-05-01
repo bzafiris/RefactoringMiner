@@ -19,6 +19,10 @@ public class CommitAggregateCSVLogger extends AbstractCSVLogger {
     @Override
     protected String getHeader() {
         return new StringBuffer()
+                .append("Project")
+                .append(CSV_FIELD_SEPARATOR)
+                .append("Branch")
+                .append(CSV_FIELD_SEPARATOR)
                 .append("CommitId")
                 .append(CSV_FIELD_SEPARATOR)
                 .append("RefactoringCount")
@@ -61,9 +65,13 @@ public class CommitAggregateCSVLogger extends AbstractCSVLogger {
 
     }
 
-    private static String getResultRefactoringDescription(RevCommit currentCommit, RefactoringStatsCollector ref) {
+    private String getResultRefactoringDescription(RevCommit currentCommit, RefactoringStatsCollector ref) {
 
         StringBuilder builder = new StringBuilder();
+        builder.append(projectName);
+        builder.append(CSV_FIELD_SEPARATOR);
+        builder.append(branch);
+        builder.append(CSV_FIELD_SEPARATOR);
         builder.append(currentCommit.getId().getName());
         builder.append(CSV_FIELD_SEPARATOR);
         builder.append(ref.getRefactoringCount());

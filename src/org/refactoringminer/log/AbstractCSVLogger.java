@@ -13,6 +13,24 @@ import java.util.List;
 public abstract class AbstractCSVLogger implements RefactoringLogger {
 
     private String csvFilePath;
+    protected String projectName;
+    protected String branch;
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
     public String getCsvFilePath() {
         return csvFilePath;
