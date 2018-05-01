@@ -19,4 +19,8 @@ public class RefactoringLoggerFactory {
         return new DetailedCSVLogger();
     }
 
+    public AbstractCSVLogger getCommitAggregateCSVLogger(){
+        return new CommitAggregateCSVLogger();
+    }
+
 }

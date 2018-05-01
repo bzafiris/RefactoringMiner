@@ -41,7 +41,7 @@ public class RefactoringMiner {
 			return;
 		}
 
-        csvLogger = RefactoringLoggerFactory.getInstance().getDetailedCSVLogger();
+        csvLogger = RefactoringLoggerFactory.getInstance().getCommitAggregateCSVLogger();
 
 		if (option.equalsIgnoreCase("-a")) {
 			detectAll(args);

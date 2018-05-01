@@ -25,7 +25,11 @@ public class ConvertAnonymousClassToTypeRefactoring implements Refactoring {
 		return sb.toString();
 	}
 
-    @Override
+	public UMLClass getAddedClass() {
+		return addedClass;
+	}
+
+	@Override
     public void accept(RefactoringVisitor visitor) {
         visitor.visitConvertAnonymousClassToType(this);
     }
