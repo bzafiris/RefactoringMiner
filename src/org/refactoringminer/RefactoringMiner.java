@@ -41,6 +41,8 @@ public class RefactoringMiner {
 			return;
 		}
 
+        csvLogger = RefactoringLoggerFactory.getInstance().getDetailedCSVLogger();
+
 		if (option.equalsIgnoreCase("-a")) {
 			detectAll(args);
 		} else if (option.equalsIgnoreCase("-bc")) {
@@ -52,8 +54,6 @@ public class RefactoringMiner {
 		} else {
 			throw argumentException();
 		}
-
-		csvLogger = RefactoringLoggerFactory.getInstance().getDetailedCSVLogger();
 
 	}
 
