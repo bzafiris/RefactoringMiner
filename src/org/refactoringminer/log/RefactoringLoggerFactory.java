@@ -16,7 +16,7 @@ public class RefactoringLoggerFactory {
     }
 
     public AbstractCSVLogger getDetailedCSVLogger(){
-        return new DefaultCSVLogger();
+        return new DetailedCSVLogger();
     }
 
 }
