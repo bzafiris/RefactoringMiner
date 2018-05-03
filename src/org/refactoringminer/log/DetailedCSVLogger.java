@@ -12,7 +12,7 @@ import static org.refactoringminer.util.StringUtils.trimWhitespaces;
 
 public class DetailedCSVLogger extends AbstractCSVLogger {
 
-    public static final String CSV_FIELD_SEPARATOR = "|||";
+    public static final String CSV_FIELD_SEPARATOR = "^";
 
     static SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
 
