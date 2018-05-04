@@ -7,6 +7,7 @@ public class FileFilterFactory {
         fileNameFilter.addExclusionPattern("src/test");
         fileNameFilter.addExclusionPattern("javatests");
         fileNameFilter.addExclusionPattern("examples");
+        fileNameFilter.addExclusionPattern("tests");
         return fileNameFilter;
     }
 }
