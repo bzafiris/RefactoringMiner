@@ -51,12 +51,16 @@ import org.refactoringminer.util.GitServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.stream.Collectors;
+import org.refactoringminer.util.filter.FileNameFilter;
+
 public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMiner {
 
 	Logger logger = LoggerFactory.getLogger(GitHistoryRefactoringMinerImpl.class);
 	private Set<RefactoringType> refactoringTypesToConsider = null;
-	
-	public GitHistoryRefactoringMinerImpl() {
+    private FileNameFilter fileFilter;
+
+    public GitHistoryRefactoringMinerImpl() {
 		this.setRefactoringTypesToConsider(
 			RefactoringType.RENAME_CLASS,
 			RefactoringType.MOVE_CLASS,
@@ -137,7 +141,12 @@ public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMine
 		List<String> filePathsCurrent = new ArrayList<String>();
 		Map<String, String> renamedFilesHint = new HashMap<String, String>();
 		gitService.fileTreeDiff(repository, currentCommit, filePathsBefore, filePathsCurrent, renamedFilesHint);
-		
+
+        if (fileFilter != null) { // filter files, not yet implemented
+            filePathsBefore = filePathsBefore.stream().filter(fileName -> fileFilter.accept(fileName)).collect(Collectors.toList());
+            filePathsCurrent = filePathsCurrent.stream().filter(fileName -> fileFilter.accept(fileName)).collect(Collectors.toList());
+        }
+
 		Set<String> repositoryDirectoriesBefore = new LinkedHashSet<String>();
 		Set<String> repositoryDirectoriesCurrent = new LinkedHashSet<String>();
 		Map<String, String> fileContentsBefore = new LinkedHashMap<String, String>();
@@ -152,17 +161,17 @@ public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMine
 
 				populateFileContents(repository, currentCommit, filePathsCurrent, fileContentsCurrent, repositoryDirectoriesCurrent);
 				UMLModel currentUMLModel = createModel(projectFolder, fileContentsCurrent, repositoryDirectoriesCurrent);
-				
+
 				refactoringsAtRevision = parentUMLModel.diff(currentUMLModel, renamedFilesHint).getRefactorings();
 				refactoringsAtRevision = filter(refactoringsAtRevision);
-				
+
 			} else {
 				//logger.info(String.format("Ignored revision %s with no changes in java files", commitId));
 				refactoringsAtRevision = Collections.emptyList();
 			}
 			handler.handle(commitId, refactoringsAtRevision);
 			handler.handle(currentCommit, refactoringsAtRevision);
-			
+
 			walk.dispose();
 		}
 		return refactoringsAtRevision;
@@ -200,10 +209,10 @@ public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMine
 			String parentCommitId = populateWithGitHubAPI(cloneURL, currentCommitId, filesBefore, filesCurrent, renamedFilesHint);
 			File currentFolder = new File(projectFolder.getParentFile(), projectFolder.getName() + "-" + currentCommitId);
 			File parentFolder = new File(projectFolder.getParentFile(), projectFolder.getName() + "-" + parentCommitId);
-			if (!currentFolder.exists()) {	
+			if (!currentFolder.exists()) {
 				downloadAndExtractZipFile(projectFolder, cloneURL, currentCommitId);
 			}
-			if (!parentFolder.exists()) {	
+			if (!parentFolder.exists()) {
 				downloadAndExtractZipFile(projectFolder, cloneURL, parentCommitId);
 			}
 			if (currentFolder.exists() && parentFolder.exists()) {
@@ -447,4 +456,8 @@ public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMine
 		}
 		return null;
 	}
+
+    public void setSourceFileFilter(FileNameFilter fileNameFilter) {
+        this.fileFilter = fileNameFilter;
+    }
 }

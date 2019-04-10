@@ -9,6 +9,8 @@ import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringType;
 import org.refactoringminer.util.PrefixSuffixUtils;
 
+import org.refactoringminer.api.RefactoringVisitor;
+
 public class MoveClassRefactoring implements Refactoring {
 	private UMLClass originalClass;
 	private UMLClass movedClass;
@@ -72,4 +74,9 @@ public class MoveClassRefactoring implements Refactoring {
 		classNames.add(getMovedClass().getName());
 		return classNames;
 	}
+
+    @Override
+    public void accept(RefactoringVisitor visitor) {
+        visitor.visitMoveClass(this);
+    }
 }

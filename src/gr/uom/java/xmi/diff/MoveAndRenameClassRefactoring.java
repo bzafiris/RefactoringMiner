@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringType;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class MoveAndRenameClassRefactoring implements Refactoring {
 
@@ -61,5 +62,10 @@ public class MoveAndRenameClassRefactoring implements Refactoring {
 		List<String> classNames = new ArrayList<String>();
 		classNames.add(getRenamedClass().getName());
 		return classNames;
+	}
+
+	@Override
+	public void accept(RefactoringVisitor visitor) {
+		visitor.visitMoveAndRenameClassOperation(this);
 	}
 }

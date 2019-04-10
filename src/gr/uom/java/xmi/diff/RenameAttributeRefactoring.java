@@ -8,6 +8,7 @@ import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringType;
 
 import gr.uom.java.xmi.decomposition.VariableDeclaration;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class RenameAttributeRefactoring implements Refactoring {
 	private VariableDeclaration originalAttribute;
@@ -108,5 +109,10 @@ public class RenameAttributeRefactoring implements Refactoring {
 		List<String> classNames = new ArrayList<String>();
 		classNames.add(classNameAfter);
 		return classNames;
+	}
+
+	@Override
+	public void accept(RefactoringVisitor visitor) {
+		visitor.visitRenameAttributeOperation(this);
 	}
 }

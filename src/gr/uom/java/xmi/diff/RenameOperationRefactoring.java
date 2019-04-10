@@ -11,13 +11,14 @@ import org.refactoringminer.api.RefactoringType;
 import gr.uom.java.xmi.UMLOperation;
 import gr.uom.java.xmi.decomposition.UMLOperationBodyMapper;
 import gr.uom.java.xmi.decomposition.replacement.Replacement;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class RenameOperationRefactoring implements Refactoring {
 	private UMLOperation originalOperation;
 	private UMLOperation renamedOperation;
 	private Set<Replacement> replacements;
 	private UMLOperationBodyMapper bodyMapper;
-	
+
 	public RenameOperationRefactoring(UMLOperationBodyMapper bodyMapper) {
 		this.bodyMapper = bodyMapper;
 		this.originalOperation = bodyMapper.getOperation1();
@@ -108,4 +109,9 @@ public class RenameOperationRefactoring implements Refactoring {
 		classNames.add(getRenamedOperation().getClassName());
 		return classNames;
 	}
+
+    @Override
+    public void accept(RefactoringVisitor visitor) {
+        visitor.visitRenameOperation(this);
+    }
 }

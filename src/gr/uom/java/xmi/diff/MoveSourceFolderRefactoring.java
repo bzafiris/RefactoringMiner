@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringType;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class MoveSourceFolderRefactoring implements Refactoring {
 	private List<MovedClassToAnotherSourceFolder> movedClassesToAnotherSourceFolder;
@@ -44,7 +45,12 @@ public class MoveSourceFolderRefactoring implements Refactoring {
 		return sb.toString();
 	}
 
-	public String getName() {
+    @Override
+    public void accept(RefactoringVisitor visitor) {
+        visitor.visitMoveSourceFolder(this);
+    }
+
+    public String getName() {
 		return this.getRefactoringType().getDisplayName();
 	}
 

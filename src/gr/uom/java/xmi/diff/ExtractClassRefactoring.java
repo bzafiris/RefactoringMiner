@@ -10,6 +10,7 @@ import org.refactoringminer.api.RefactoringType;
 import gr.uom.java.xmi.UMLAttribute;
 import gr.uom.java.xmi.UMLClass;
 import gr.uom.java.xmi.UMLOperation;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class ExtractClassRefactoring implements Refactoring {
 	private UMLClass extractedClass;
@@ -76,5 +77,10 @@ public class ExtractClassRefactoring implements Refactoring {
 		List<String> classNames = new ArrayList<String>();
 		classNames.add(getExtractedClass().getName());
 		return classNames;
+	}
+
+	@Override
+	public void accept(RefactoringVisitor visitor) {
+		visitor.visitExtractClassOperation(this);
 	}
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringType;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class RenameClassRefactoring implements Refactoring {
 
@@ -27,7 +28,12 @@ public class RenameClassRefactoring implements Refactoring {
 		return sb.toString();
 	}
 
-	public String getName() {
+    @Override
+    public void accept(RefactoringVisitor visitor) {
+        visitor.visitRenameClass(this);
+    }
+
+    public String getName() {
 		return this.getRefactoringType().getDisplayName();
 	}
 

@@ -9,6 +9,7 @@ import org.refactoringminer.api.RefactoringType;
 import gr.uom.java.xmi.UMLOperation;
 import gr.uom.java.xmi.decomposition.AbstractCodeMapping;
 import gr.uom.java.xmi.decomposition.VariableDeclaration;
+import org.refactoringminer.api.RefactoringVisitor;
 
 public class RenameVariableRefactoring implements Refactoring {
 	private VariableDeclaration originalVariable;
@@ -129,5 +130,10 @@ public class RenameVariableRefactoring implements Refactoring {
 		List<String> classNames = new ArrayList<String>();
 		classNames.add(operationAfter.getClassName());
 		return classNames;
+	}
+
+	@Override
+	public void accept(RefactoringVisitor visitor) {
+		visitor.visitRenameVariableOperation(this);
 	}
 }
