@@ -43,13 +43,18 @@ public class CommitAggregateCSVLogger extends AbstractCSVLogger {
                 .append(CSV_FIELD_SEPARATOR)
                 .append("MoveOperation")
                 .append(CSV_FIELD_SEPARATOR)
+                .append("MoveSourceFolder")
+                .append(CSV_FIELD_SEPARATOR)
+                .append("RenameClass")
+                .append(CSV_FIELD_SEPARATOR)
+                .append("RenameOperation")
+                .append(CSV_FIELD_SEPARATOR)
+                .append("RenamePackage")
                 .append("Author")
                 .append(CSV_FIELD_SEPARATOR)
                 .append("Date")
                 .append(CSV_FIELD_SEPARATOR)
                 .append("RefactoredClasses")
-                .append(CSV_FIELD_SEPARATOR)
-                .append("GitComment")
                 .toString();
     }
 
@@ -92,6 +97,14 @@ public class CommitAggregateCSVLogger extends AbstractCSVLogger {
         builder.append(CSV_FIELD_SEPARATOR);
         builder.append(ref.moveOperationCount);
         builder.append(CSV_FIELD_SEPARATOR);
+        builder.append(ref.moveSourceFolderRefactorings);
+        builder.append(CSV_FIELD_SEPARATOR);
+        builder.append(ref.renameClassRefactoringCount);
+        builder.append(CSV_FIELD_SEPARATOR);
+        builder.append(ref.renameOperationRefactorings);
+        builder.append(CSV_FIELD_SEPARATOR);
+        builder.append(ref.renamePackageRefactorings);
+        builder.append(CSV_FIELD_SEPARATOR);
         PersonIdent authorIdent = currentCommit.getAuthorIdent();
         builder.append(authorIdent.getName()).append(CSV_FIELD_SEPARATOR);
         Date commitDate = authorIdent.getWhen();
@@ -99,8 +112,6 @@ public class CommitAggregateCSVLogger extends AbstractCSVLogger {
         builder.append(CSV_FIELD_SEPARATOR);
         String refactoredClasses = String.join(";", ref.getRefactoredClasses());
         builder.append(refactoredClasses.isEmpty() ? "-" : refactoredClasses);
-        builder.append(CSV_FIELD_SEPARATOR);
-        builder.append(trimWhitespaces(currentCommit.getFullMessage()));
 
         return builder.toString();
     }

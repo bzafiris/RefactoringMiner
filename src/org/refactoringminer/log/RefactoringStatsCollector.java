@@ -17,7 +17,12 @@ public class RefactoringStatsCollector implements RefactoringVisitor {
     public int moveAttributeCount = 0;
     public int moveClassCount = 0;
     public int moveOperationCount = 0;
-    //public int moveSourceFolderCount = 0;
+    public int moveSourceFolderRefactorings = 0;
+    public int renameClassRefactoringCount = 0;
+    public int renameOperationRefactorings = 0;
+    public int renamePackageRefactorings = 0;
+
+    //public int moveSourceFolderRefactorings = 0;
 
 
     @Override
@@ -75,21 +80,23 @@ public class RefactoringStatsCollector implements RefactoringVisitor {
 
     @Override
     public void visitMoveSourceFolder(MoveSourceFolderRefactoring refactoring) {
-
+        moveSourceFolderRefactorings++;
     }
 
     @Override
     public void visitRenameClass(RenameClassRefactoring refactoring) {
-
+        renameClassRefactoringCount++;
     }
 
     @Override
     public void visitRenameOperation(RenameOperationRefactoring refactoring) {
+        renameOperationRefactorings++;
 
     }
 
     @Override
     public void visitRenamePackage(RenamePackageRefactoring refactoring) {
+        renamePackageRefactorings++;
 
     }
 
@@ -101,7 +108,9 @@ public class RefactoringStatsCollector implements RefactoringVisitor {
         return anonymousClassToTypeCount + extractAndMoveOperationCount
                 + extractOperationCount + extractSuperclassCount
                 + inlineOperationCount + moveAttributeCount
-                + moveClassCount + moveOperationCount;
+                + moveClassCount + moveOperationCount
+                + moveSourceFolderRefactorings + renameClassRefactoringCount
+                + renameOperationRefactorings + renamePackageRefactorings;
     }
 
 }
