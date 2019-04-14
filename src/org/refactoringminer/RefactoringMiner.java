@@ -90,7 +90,9 @@ public class RefactoringMiner {
 
     private static void prepareCSVLogger(String folder, String branch, String filePath) throws IOException {
         csvLogger.setCsvFilePath(filePath);
-        csvLogger.setProjectName(folder);
+        String[] pathSegments = folder.split("/");
+        String projectName = pathSegments[pathSegments.length - 1];
+        csvLogger.setProjectName(projectName);
         csvLogger.setBranch(branch);
         csvLogger.start();
     }
