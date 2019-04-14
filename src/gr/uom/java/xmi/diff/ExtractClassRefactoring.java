@@ -81,6 +81,6 @@ public class ExtractClassRefactoring implements Refactoring {
 
 	@Override
 	public void accept(RefactoringVisitor visitor) {
-		visitor.visitExtractClassOperation(this);
+		visitor.visitExtractClass(this);
 	}
 }

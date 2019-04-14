@@ -98,6 +98,6 @@ public class ExtractVariableRefactoring implements Refactoring {
 
 	@Override
 	public void accept(RefactoringVisitor visitor) {
-		visitor.visitExtractVariableOperation(this);
+		visitor.visitExtractVariable(this);
 	}
 }

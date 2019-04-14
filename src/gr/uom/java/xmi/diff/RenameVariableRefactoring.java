@@ -134,6 +134,6 @@ public class RenameVariableRefactoring implements Refactoring {
 
 	@Override
 	public void accept(RefactoringVisitor visitor) {
-		visitor.visitRenameVariableOperation(this);
+		visitor.visitRenameVariable(this);
 	}
 }

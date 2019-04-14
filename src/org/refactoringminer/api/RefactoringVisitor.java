@@ -28,17 +28,17 @@ public interface RefactoringVisitor {
 
     void visitRenamePackage(RenamePackageRefactoring refactoring);
 
-    void visitExtractClassOperation(ExtractClassRefactoring extractClassRefactoring);
+    void visitExtractClass(ExtractClassRefactoring extractClassRefactoring);
 
-    void visitExtractVariableOperation(ExtractVariableRefactoring extractVariableRefactoring);
+    void visitExtractVariable(ExtractVariableRefactoring extractVariableRefactoring);
 
-    void visitInlineVariableOperation(InlineVariableRefactoring inlineVariableRefactoring);
+    void visitInlineVariable(InlineVariableRefactoring inlineVariableRefactoring);
 
-    void visitMoveAndRenameClassOperation(MoveAndRenameClassRefactoring moveAndRenameClassRefactoring);
+    void visitMoveAndRenameClass(MoveAndRenameClassRefactoring moveAndRenameClassRefactoring);
 
-    void visitRenameAttributeOperation(RenameAttributeRefactoring renameAttributeRefactoring);
+    void visitRenameAttribute(RenameAttributeRefactoring renameAttributeRefactoring);
 
-    void visitRenameVariableOperation(RenameVariableRefactoring renameVariableRefactoring);
+    void visitRenameVariable(RenameVariableRefactoring renameVariableRefactoring);
 
 }
 

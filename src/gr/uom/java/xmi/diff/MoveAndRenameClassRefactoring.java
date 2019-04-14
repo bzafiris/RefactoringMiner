@@ -66,6 +66,6 @@ public class MoveAndRenameClassRefactoring implements Refactoring {
 
 	@Override
 	public void accept(RefactoringVisitor visitor) {
-		visitor.visitMoveAndRenameClassOperation(this);
+		visitor.visitMoveAndRenameClass(this);
 	}
 }

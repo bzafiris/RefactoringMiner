@@ -98,6 +98,6 @@ public class InlineVariableRefactoring implements Refactoring {
 
 	@Override
 	public void accept(RefactoringVisitor visitor) {
-		visitor.visitInlineVariableOperation(this);
+		visitor.visitInlineVariable(this);
 	}
 }

@@ -113,6 +113,6 @@ public class RenameAttributeRefactoring implements Refactoring {
 
 	@Override
 	public void accept(RefactoringVisitor visitor) {
-		visitor.visitRenameAttributeOperation(this);
+		visitor.visitRenameAttribute(this);
 	}
 }
